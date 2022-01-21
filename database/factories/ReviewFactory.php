@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Book;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
 
 class ReviewFactory extends Factory
 {
@@ -14,7 +16,9 @@ class ReviewFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => rand(1, 3)
+            // 'book_id' => Book::all('id')->random(),
+            // 'book_id' => rand(1, 15),
+            'body' => $this->faker->text(200)
         ];
     }
 }

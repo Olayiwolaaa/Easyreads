@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AuthorFactory extends Factory
@@ -13,8 +14,12 @@ class AuthorFactory extends Factory
      */
     public function definition()
     {
+        // $user = User::all(['id', 'name'])->random();
+        // $user_name = str_replace(' ', '-', strtolower($user->name));
+
         return [
-            'name' => $this->faker->firstName().' '.$this->faker->lastName(),
+            // 'user_id' => $user->id,
+            // 'slug' => $user_name,
             'bio' => $this->faker->text(200),
             'is_verified' => rand(0, 1),
         ];

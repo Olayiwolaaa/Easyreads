@@ -15,16 +15,16 @@ class CreateBooksTable extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug');
+            $table->string('title');
+            $table->string('slug')->nullable();
             $table->text('description');
-            $table->foreignId('author_id')->constrained();
-            $table->foreignId('category_id')->constrained();
-            $table->integer('quantity');
+            $table->foreignId('author_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->double('init_price');
-            $table->integer('discount_rate');
-            $table->tinyText('coupon_code');
-            $table->double('price');
+            $table->double('discount_price');
+            $table->foreignId('rating_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('coupon_id')->nullable()->constrained()->onDelete('cascade');
+            // $table->foreignId('image_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

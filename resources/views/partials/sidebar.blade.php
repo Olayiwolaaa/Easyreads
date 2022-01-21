@@ -1,49 +1,98 @@
-<nav class="sidebar sidebar-offcanvas" id="sidebar">
-  <ul class="nav">
-   <li class="nav-item">
-     <a class="nav-link" href="{{ route('home') }}">
-       <i class="mdi mdi-grid-large menu-icon"></i>
-       <span class="menu-title">Dashboard</span>
-     </a>
-   </li>
-   <li class="nav-item nav-category">Forms and Datas</li>
-   <li class="nav-item">
-     <a class="nav-link" href="{{ route('admin.books.index') }}" aria-expanded="false" aria-controls="form-elements">
-        <i class="menu-icon mdi mdi-card-text-outline"></i>
-          <span class="menu-title">Books</span>
-     </a>
-   </li>
-   <li class="nav-item">
-     <a class="nav-link" href="{{ route('admin.categories.index') }}" aria-expanded="false" aria-controls="form-elements">
-        <i class="menu-icon mdi mdi-card-text-outline"></i>
-          <span class="menu-title">Category</span>
-     </a>
-   </li>
-   <li class="nav-item">
-    <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-      <i class="menu-icon mdi mdi-account-circle-outline"></i>
-      <span class="menu-title">Users</span>
-      <i class="menu-arrow"></i>
-    </a>
-    <div class="collapse" id="auth">
-      <ul class="nav flex-column sub-menu">
-        <li class="nav-item"> <a class="nav-link" href="{{ route('admin.authors.index') }}"> Author </a></li>
-        <li class="nav-item"> <a class="nav-link" href="{{ route('admin.users.index') }}"> All User </a></li>
-      </ul>
-    </div>
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+  <!-- Sidebar - Brand -->
+  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+      <div class="sidebar-brand-icon">
+          <img src="{{asset('/admin/img/logo.png')}}" width="30" alt="">
+      </div>
+      <div class="sidebar-brand-text mx-3">Book shop</div>
+  </a>
+
+  <!-- Divider -->
+  <hr class="sidebar-divider my-0">
+
+  <!-- Nav Item - Dashboard -->
+  <li class="nav-item active">
+      <a class="nav-link" href="{{ route('home') }}">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span></a>
   </li>
-   <li class="nav-item nav-category">pages</li>
-   <li class="nav-item">
-    <a class="nav-link" href="" aria-expanded="false" aria-controls="form-elements">
-       <i class="menu-icon mdi mdi-card-text-outline"></i>
-         <span class="menu-title">Orders</span>
-    </a>
+
+  <!-- Divider -->
+  <hr class="sidebar-divider">
+
+  <!-- Heading -->
+  <div class="sidebar-heading">
+      Activities
+  </div>
+
+  <!-- Nav Item - Pages Collapse Menu -->
+  <li class="nav-item">
+      <a class="nav-link" href="{{route('admin.books.index')}}">
+          <i class="fas fa-fw fa-book"></i>
+          <span>Books</span>
+      </a>
   </li>
-   <li class="nav-item">
-    <a class="nav-link" href="" aria-expanded="false" aria-controls="form-elements">
-       <i class="menu-icon mdi mdi-card-text-outline"></i>
-         <span class="menu-title">Reviews</span>
-    </a>
+  <li class="nav-item">
+      <a class="nav-link" href="">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Categories</span>
+      </a>
   </li>
- </ul>
-</nav>
+
+  <!-- Nav Item - Utilities Collapse Menu -->
+  <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+          <i class="fas fa-fw fa-user-cog"></i>
+          <span>Users</span>
+      </a>
+      <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+              <a class="collapse-item" href="">Authors</a>
+              <a class="collapse-item" href="">Users</a>
+          </div>
+      </div>
+  </li>
+
+  <!-- Divider -->
+  <hr class="sidebar-divider">
+
+  <!-- Heading -->
+  <div class="sidebar-heading">
+      Activities from users
+  </div>
+
+  <li class="nav-item">
+      <a class="nav-link" href="">
+          <i class="fas fa-fw fa-shopping-basket"></i>
+          <span>Orders</span></a>
+  </li>
+
+  <li class="nav-item">
+      <a class="nav-link" href="">
+          <i class="fas fa-fw fa-comments"></i>
+          <span>Reviews</span></a>
+  </li>
+  <!-- Nav Item - Charts -->
+  <li class="nav-item">
+      <a class="nav-link" href="#">
+          <i class="fas fa-fw fa-envelope"></i>
+          <span>Messages</span></a>
+  </li>
+
+  <!-- Nav Item - Tables -->
+  <li class="nav-item active">
+      <a class="nav-link" href="#">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Accounts</span></a>
+  </li>
+
+  <!-- Divider -->
+  <hr class="sidebar-divider d-none d-md-block">
+
+  <!-- Sidebar Toggler (Sidebar) -->
+  <div class="text-center d-none d-md-inline">
+      <button class="rounded-circle border-0" id="sidebarToggle"></button>
+  </div>
+
+</ul>
