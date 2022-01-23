@@ -59,7 +59,7 @@
                         <tbody>
                             @foreach ($books as $book)
                                 <tr class="odd">
-                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>
                                         <div class="action d-flex flex-row">
                                             <a href="{{ route('admin.books.edit', $book->id) }}" class="btn-primary btn btn-sm mr-2"><i class="fas fa-edit"></i></a>
@@ -73,12 +73,12 @@
                                         </div>
                                     </td>
                                     <td><img src="{{ $book->getFirstMediaUrl('cover_images', 'thumb') }}"></td>
-                                    <td>{{$book->title}}</td>
-                                    <td>{{$book->category->name}}</td>
-                                    <td>{{$book->author->user->name}}</td>  
-                                    <td>${{$book->init_price}}</td>
-                                    <td>{{$book->discount_rate}} %</td>
-                                    <td>{{$book->created_at->diffForHumans()}}</td>
+                                    <td>{{ $book->title }}</td>
+                                    <td>{{ $book->category->name }}</td>
+                                    <td>{{ $book->author->user->name }}</td>  
+                                    <td>${{ $book->init_price }}</td>
+                                    <td>{{ $book->discount_rate }} %</td>
+                                    <td>{{ $book->created_at->diffForHumans() }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

@@ -50,7 +50,7 @@
                         <tbody>
                             @foreach ($books as $book)
                                 <tr class="odd">
-                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>
                                         <div class="action d-flex flex-row">
                                             <a onclick="return confirm('Are you sure you want to restore this book?')" href="{{ route('admin.books.restore', $book->id) }}" class="btn btn-sm btn-primary mr-2"><i class="fa fa-undo"></i></a>
@@ -64,12 +64,12 @@
                                         </div>
                                     </td>
                                     <td><img src="{{ $book->getFirstMediaUrl('cover_images', 'thumb') }}"></td>
-                                    <td>{{$book->title}}</td>
-                                    <td>{{$book->category->name}}</td>
-                                    <td>{{$book->author->user->name}}</td>  
-                                    <td>${{$book->init_price}}</td>
-                                    <td>{{$book->discount_rate}} %</td>
-                                    <td>{{$book->created_at->diffForHumans()}}</td>
+                                    <td>{{ $book->title }}</td>
+                                    <td>{{ $book->category->name }}</td>
+                                    <td>{{ $book->author->user->name }}</td>  
+                                    <td>${{ $book->init_price }}</td>
+                                    <td>{{ $book->discount_rate }} %</td>
+                                    <td>{{ $book->created_at->diffForHumans() }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

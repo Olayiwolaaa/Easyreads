@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use Illuminate\Support\Facades\DB;
 
 class AdminCategoryController extends Controller
 {
@@ -16,7 +17,10 @@ class AdminCategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::withCount(['books'])
+            ->get();
+
+        return view('dashboard.admin.categories.index', compact('categories'));
     }
 
     /**
