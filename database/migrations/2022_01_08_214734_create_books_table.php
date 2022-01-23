@@ -18,13 +18,12 @@ class CreateBooksTable extends Migration
             $table->string('title');
             $table->string('slug')->nullable();
             $table->text('description');
-            $table->foreignId('author_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->double('init_price');
             $table->double('discount_price');
+            $table->foreignId('author_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->foreignId('rating_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('coupon_id')->nullable()->constrained()->onDelete('cascade');
-            // $table->foreignId('image_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -41,7 +41,6 @@
                                 <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Author</th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Price</th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Discount</th>
-                                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Quantity</th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Created date</th>
                             </tr>
                         </thead>
@@ -55,7 +54,6 @@
                                 <th rowspan="1" colspan="1">Author</th>
                                 <th rowspan="1" colspan="1">Price</th>
                                 <th rowspan="1" colspan="1">Discount</th>
-                                <th rowspan="1" colspan="1">Quantity</th>
                                 <th rowspan="1" colspan="1">Created date</th>
                         </tfoot>
                         <tbody>
@@ -64,7 +62,7 @@
                                     <td>{{$loop->iteration}}</td>
                                     <td>
                                         <div class="action d-flex flex-row">
-                                            <a href="" class="btn-primary btn btn-sm mr-2"><i class="fas fa-edit"></i></a>
+                                            <a href="{{ route('admin.books.edit', $book->id) }}" class="btn-primary btn btn-sm mr-2"><i class="fas fa-edit"></i></a>
                                             <form action="{{ route('admin.books.destroy', $book) }}" method="post">
                                                 @csrf
                                                 @method("DELETE")
@@ -77,10 +75,9 @@
                                     <td><img src="{{ $book->getFirstMediaUrl('cover_images', 'thumb') }}"></td>
                                     <td>{{$book->title}}</td>
                                     <td>{{$book->category->name}}</td>
-                                    {{-- <td>{{$book->author->user->name}}</td>   --}}
+                                    <td>{{$book->author->user->name}}</td>  
                                     <td>${{$book->init_price}}</td>
                                     <td>{{$book->discount_rate}} %</td>
-                                    <td>{{$book->quantity}}</td>
                                     <td>{{$book->created_at->diffForHumans()}}</td>
                                 </tr>
                             @endforeach

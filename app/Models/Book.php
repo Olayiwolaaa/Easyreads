@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media as ModelsMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Book extends Model implements HasMedia
 {
@@ -39,23 +39,15 @@ class Book extends Model implements HasMedia
         return $this->hasMany(Coupon::class);
     }
 
-    // public function getDiscountRateAttribute()
-    // {
-    //     return round((($this->init_price - $this->discount_price)*100)/$this->init_price);
-    // }
-
-    public function discountRate(): Attribute
+    public function getDiscountRateAttribute()
     {
-        return new Attribute(
-            get : fn ($value) => ((($this->init_price - $this->discount_price)*100)/$this->init_price),
-            set : fn ($value) => (($this->init_price * $this->discount_rate)/100),
-        );
+        return round((($this->init_price - $this->discount_price)*100)/$this->init_price);
     }
 
-    public function registerMediaConversions(?ModelsMedia $media = null): void
+    public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumb')
-            ->width(100)
-            ->height(100);
+              ->width(100)
+              ->height(100);
     }
 }

@@ -144,6 +144,9 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'cover_image' => [
+            'max' => 'The cover image maximum size is 1MB'
+        ],
     ],
 
     /*

@@ -32,7 +32,6 @@
                                 <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Author</th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Price</th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Discount</th>
-                                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Quantity</th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Deleted date</th>
                             </tr>
                         </thead>
@@ -46,7 +45,6 @@
                                 <th rowspan="1" colspan="1">Author</th>
                                 <th rowspan="1" colspan="1">Price</th>
                                 <th rowspan="1" colspan="1">Discount</th>
-                                <th rowspan="1" colspan="1">Quantity</th>
                                 <th rowspan="1" colspan="1">Deleted date</th>
                         </tfoot>
                         <tbody>
@@ -56,23 +54,22 @@
                                     <td>
                                         <div class="action d-flex flex-row">
                                             <a onclick="return confirm('Are you sure you want to restore this book?')" href="{{ route('admin.books.restore', $book->id) }}" class="btn btn-sm btn-primary mr-2"><i class="fa fa-undo"></i></a>
-                                            <form action="{{ route('admin.books.force-delete', $book->id) }}" method="post">
+                                            <form action="{{ route('admin.books.forceDelete', $book->id) }}" method="POST">
                                                 @csrf
-                                                @method("DELETE")
+                                                @method('DELETE')
                                                 <button type="submit" onclick="return confirm('Are you sure to delete? This book will be permanently deleted!')" class="btn btn-sm btn-danger">
                                                     <i class="fas fa-times"></i>
                                                 </button>
                                             </form>
                                         </div>
                                     </td>
-                                    <td>{{$book->image->file}}</td>
+                                    <td><img src="{{ $book->getFirstMediaUrl('cover_images', 'thumb') }}"></td>
                                     <td>{{$book->title}}</td>
                                     <td>{{$book->category->name}}</td>
                                     <td>{{$book->author->user->name}}</td>  
                                     <td>${{$book->init_price}}</td>
                                     <td>{{$book->discount_rate}} %</td>
-                                    <td>{{$book->quantity}}</td>
-                                    <td>{{$book->deleted_at->diffForHumans()}}</td>
+                                    <td>{{$book->created_at->diffForHumans()}}</td>
                                 </tr>
                             @endforeach
                         </tbody>

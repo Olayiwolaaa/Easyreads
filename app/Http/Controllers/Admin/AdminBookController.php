@@ -4,12 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateBookRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Models\Category;
 use App\Models\User;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
-class AdminBooksController extends Controller
+class AdminBookController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -40,12 +44,18 @@ class AdminBooksController extends Controller
     
     public function store(StoreBookRequest $request)
     {
-        $book = Book::create($request->validated());
+        $input = $request->validated();
+        $input['discount_price'] = isset($request['discount_price']) ?
+            $request['init_price'] - ($request['init_price'] * ($request['discount_price'] / 100)) :
+            $request['init_price'];
+        $input['author_id'] = auth()->id();
+        
+        $book = Book::create($input);
+
         if ($request->hasFile('cover_image')) 
         {
             $book->addMediaFromRequest('cover_image')->toMediaCollection('cover_images');
         }
-        // $request->hasFile('cover_image') ?? $book->addMediaFromRequest('cover_image')->toMediaCollection('cover_images');
 
         return redirect()->route('admin.books.index')->with('success_message', 'Book Successfully Added');
     }
@@ -69,7 +79,12 @@ class AdminBooksController extends Controller
      */
     public function edit($id)
     {
-        //
+        $categories = DB::table('categories')
+            ->select('name', 'id')
+            ->get();
+        $book = Book::findOrFail($id);
+
+        return view('dashboard.admin.books.edit', compact('book', 'categories'));
     }
 
     /**
@@ -79,9 +94,22 @@ class AdminBooksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateBookRequest $request, Book $book)
     {
-        //
+        $input = $request->validated();
+        $input['discount_price'] = isset($request['discount_price']) ?
+            $request['init_price'] - ($request['init_price'] * ($request['discount_price'] / 100)) :
+            $request['init_price'];
+        
+        $book->update($input);
+        
+        if ($request->hasFile('cover_image')) 
+        {
+            $book->media()->delete('cover_image');
+            $book->addMediaFromRequest('cover_image')->toMediaCollection('cover_images');
+        }
+
+        return redirect()->route('admin.books.index')->with('success_message', 'Book Successfully Updated');
     }
 
     /**
@@ -98,7 +126,7 @@ class AdminBooksController extends Controller
     
     public function trashBooks() 
     {
-        $books = Book::onlyTrashed()->with(['author.user', 'category', 'image'])->orderBy('id', 'DESC')->get();
+        $books = Book::onlyTrashed()->with(['author.user', 'category'])->orderBy('id', 'DESC')->get();
         return view('dashboard.admin.books.trash-books', compact('books'));
     }
     
@@ -109,8 +137,11 @@ class AdminBooksController extends Controller
         return redirect()->back()->with('success_message', 'Book restored');
     }
     
-    // public function forceDelete($id) 
-    // {
-    //     $book = Book::onlyTrashed()->findOrFail($id)->forceDelete();
-    // }
+    public function forceDelete($id) 
+    {
+        $book = Book::onlyTrashed()->findOrFail($id);
+        $book->clearMediaCollection();
+        $book->forceDelete();
+        return redirect()->back()->with('alert_message', 'Book permanenetly deleted');
+    }
 }
