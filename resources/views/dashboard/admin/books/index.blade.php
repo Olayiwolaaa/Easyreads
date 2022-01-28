@@ -14,9 +14,8 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-6 text-right">
-                    <span class="mr-2"><a href="{{ route('admin.books.index') }}">All books</a> |</span>
-                    <span class="mr-2"><a href="{{ route('admin.books.trash-books') }}">Trash books</a></span>
+                <div class="col-12 text-right">
+                    <span class="mr-2"><a href="{{ route('admin.books.trashBooks') }}">Trash books</a></span>
                 </div>
             </div>
         </div>
@@ -39,8 +38,9 @@
                                 <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 199px;">Title</th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Category</th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Author</th>
-                                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Price</th>
-                                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Discount</th>
+                                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Original Price</th>
+                                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Discount Rate</th>
+                                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Sales Price</th>
                                 <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 189px;">Created date</th>
                             </tr>
                         </thead>
@@ -52,32 +52,50 @@
                                 <th rowspan="1" colspan="1">Title</th>
                                 <th rowspan="1" colspan="1">Category</th>
                                 <th rowspan="1" colspan="1">Author</th>
-                                <th rowspan="1" colspan="1">Price</th>
-                                <th rowspan="1" colspan="1">Discount</th>
+                                <th rowspan="1" colspan="1">Original Price</th>
+                                <th rowspan="1" colspan="1">Discount Rate</th>
+                                <th rowspan="1" colspan="1">Sales Price</th>
                                 <th rowspan="1" colspan="1">Created date</th>
                         </tfoot>
                         <tbody>
                             @foreach ($books as $book)
                                 <tr class="odd">
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td>
+                                        {{ $loop->iteration }}
+                                        @if ($book->trashed())
+                                            <div class="alert alert-danger my-3">Trashed</div>
+                                        @endif
+                                    </td>
                                     <td>
                                         <div class="action d-flex flex-row">
-                                            <a href="{{ route('admin.books.edit', $book->id) }}" class="btn-primary btn btn-sm mr-2"><i class="fas fa-edit"></i></a>
-                                            <form action="{{ route('admin.books.destroy', $book) }}" method="post">
-                                                @csrf
-                                                @method("DELETE")
-                                                <button type="submit" onclick="return confirm('Book will move to trash! Are you sure to delete??')" class="btn btn-sm btn-danger">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
+                                            @if ($book->trashed())
+                                                <a onclick="return confirm('Are you sure you want to restore this book?')" href="{{ route('admin.books.restore', $book->id) }}" class="btn btn-sm btn-primary mr-2"><i class="fa fa-undo"></i></a>
+                                                <form action="{{ route('admin.book.forceDelete', $book->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" onclick="return confirm('Are you sure to delete? This book will be permanently deleted!')" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <a href="{{ route('admin.books.edit', $book->id) }}" class="btn-primary btn btn-sm mr-2"><i class="fas fa-edit"></i></a>
+                                                <form action="{{ route('admin.books.destroy', $book) }}" method="post">
+                                                    @csrf
+                                                    @method("DELETE")
+                                                    <button type="submit" onclick="return confirm('Book will move to trash! Are you sure to delete??')" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </div>
                                     </td>
                                     <td><img src="{{ $book->getFirstMediaUrl('cover_images', 'thumb') }}"></td>
                                     <td>{{ $book->title }}</td>
-                                    <td>{{ $book->category->name }}</td>
+                                    <td>{{ $book->category_id == NULL ? 'Uncategorized' : $book->category->name }}</td>
                                     <td>{{ $book->author->user->name }}</td>  
                                     <td>${{ $book->init_price }}</td>
                                     <td>{{ $book->discount_rate }} %</td>
+                                    <td>${{ $book->discount_price }}</td>
                                     <td>{{ $book->created_at->diffForHumans() }}</td>
                                 </tr>
                             @endforeach

@@ -28,7 +28,6 @@ class UpdateBookRequest extends FormRequest
             'title'             => 'required|unique:books,title,'.$book_id,
             'slug'              => 'required|unique:books,slug,'.$book_id,
             'description'       => 'required',
-            'category_id'       => 'required',
             'init_price'        => 'required|numeric',
             'discount_price'    => 'digits_between:0,100',
             'cover_image'       => 'sometimes|max:1000|mimes:png,jpg',

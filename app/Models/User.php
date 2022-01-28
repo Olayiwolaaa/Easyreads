@@ -45,7 +45,7 @@ class User extends Authenticatable implements HasMedia
     ];
     
     public function role() {
-        return $this->belongsTo(Review::class);
+        return $this->belongsTo(Role::class);
     }
 
     public function reviews() {

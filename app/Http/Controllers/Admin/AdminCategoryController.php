@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
-use Illuminate\Support\Facades\DB;
+use App\Models\Book;
 
 class AdminCategoryController extends Controller
 {
@@ -17,8 +17,7 @@ class AdminCategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::withCount(['books'])
-            ->get();
+        $categories = Category::withCount('books')->get();
 
         return view('dashboard.admin.categories.index', compact('categories'));
     }
@@ -30,7 +29,7 @@ class AdminCategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.admin.categories.create');
     }
 
     /**
@@ -41,7 +40,8 @@ class AdminCategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
+        Category::create($request->validated());
+        return redirect()->route('admin.categories.index')->with('success_message', 'Category successfully created');
     }
 
     /**
@@ -63,7 +63,8 @@ class AdminCategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        $category = Category::findOrFail($category->id);
+        return view('dashboard.admin.categories.edit',compact('category'));
     }
 
     /**
@@ -75,7 +76,8 @@ class AdminCategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $category->update($request->validated());
+        return redirect()->route('admin.categories.index')->with('success_message', 'Category Successfully Updated');
     }
 
     /**
@@ -86,6 +88,33 @@ class AdminCategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        Book::where('category_id', $category->id)->each(function($query)
+        {
+            $query->category_id = NULL;
+            $query->save();
+        });
+        
+        return back()->with('success_message', 'Category Successfully deleted');
+    }
+
+    public function books($id)
+    {
+        $books = Book::withTrashed()
+            ->with(['media', 'author.user', 'category'])
+            ->where('category_id', $id)
+            ->latest()
+            ->get();
+        return view('dashboard.admin.books.index', compact('books'));
+    }
+
+    public function uncategorizedBooks()
+    {
+        $books = Book::withTrashed()
+            ->with(['media', 'author.user', 'category'])
+            ->where('category_id', NULL)
+            ->latest()
+            ->get();
+            
+        return view('dashboard.admin.books.index', compact('books'));
     }
 }

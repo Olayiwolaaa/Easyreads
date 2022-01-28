@@ -6,12 +6,8 @@ use App\Http\Requests\StoreBookRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateBookRequest;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\Category;
-use App\Models\User;
-use Exception;
-use Illuminate\Support\Facades\Log;
 
 class AdminBookController extends Controller
 {
@@ -22,7 +18,9 @@ class AdminBookController extends Controller
      */
     public function index()
     {
-        $books = Book::with(['author.user', 'category'])->get();
+        $books = Book::with(['media', 'author.user', 'category'])
+            ->latest()
+            ->get();
 
         return view('dashboard.admin.books.index', compact('books'));
     }
@@ -37,20 +35,20 @@ class AdminBookController extends Controller
         $categories = DB::table('categories')
             ->select('name', 'id')
             ->get()
-            ->prepend(new User(['name' => '-- Please choose category --']));
+            ->prepend(new Category(['name' => '-- Please choose category --']));
 
         return view('dashboard.admin.books.create', compact('categories'));
     }
     
     public function store(StoreBookRequest $request)
     {
-        $input = $request->validated();
-        $input['discount_price'] = isset($request['discount_price']) ?
+        $request_data = $request->all();
+        $request_data['discount_price'] = isset($request['discount_price']) ?
             $request['init_price'] - ($request['init_price'] * ($request['discount_price'] / 100)) :
             $request['init_price'];
-        $input['author_id'] = auth()->id();
+        $request_data['author_id'] = auth()->id();
         
-        $book = Book::create($input);
+        $book = Book::create($request_data);
 
         if ($request->hasFile('cover_image')) 
         {
@@ -79,10 +77,11 @@ class AdminBookController extends Controller
      */
     public function edit($id)
     {
+        $book = Book::findOrFail($id);
         $categories = DB::table('categories')
             ->select('name', 'id')
-            ->get();
-        $book = Book::findOrFail($id);
+            ->get()
+            ->prepend(new Category(['name' => '-- Please choose category --']));
 
         return view('dashboard.admin.books.edit', compact('book', 'categories'));
     }
@@ -96,7 +95,7 @@ class AdminBookController extends Controller
      */
     public function update(UpdateBookRequest $request, Book $book)
     {
-        $input = $request->validated();
+        $input = $request->all();
         $input['discount_price'] = isset($request['discount_price']) ?
             $request['init_price'] - ($request['init_price'] * ($request['discount_price'] / 100)) :
             $request['init_price'];
@@ -121,20 +120,25 @@ class AdminBookController extends Controller
     public function destroy(Book $book)
     {
         $book->delete();
-        return redirect()->back()->with('alert_message', 'Book moved to trash');
+        return back()->with('alert_message', 'Book moved to trash');
     }
     
     public function trashBooks() 
     {
-        $books = Book::onlyTrashed()->with(['author.user', 'category'])->orderBy('id', 'DESC')->get();
-        return view('dashboard.admin.books.trash-books', compact('books'));
+        $books = Book::onlyTrashed()
+            ->with(['media', 'author.user', 'category'])
+            ->get();
+            
+        return view('dashboard.admin.books.trashBooks', compact('books'));
     }
     
     public function restore($id) 
     {
-        $trash = Book::onlyTrashed()->findOrFail($id);
-        $trash->restore();
-        return redirect()->back()->with('success_message', 'Book restored');
+        Book::onlyTrashed()
+            ->findOrFail($id)
+            ->restore();
+            
+        return back()->with('success_message', 'Book restored');
     }
     
     public function forceDelete($id) 
@@ -142,6 +146,7 @@ class AdminBookController extends Controller
         $book = Book::onlyTrashed()->findOrFail($id);
         $book->clearMediaCollection();
         $book->forceDelete();
-        return redirect()->back()->with('alert_message', 'Book permanenetly deleted');
+
+        return back()->with('alert_message', 'Book permanenetly deleted');
     }
 }

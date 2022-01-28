@@ -13,7 +13,7 @@ class UpdateCategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,10 @@ class UpdateCategoryRequest extends FormRequest
      */
     public function rules()
     {
+        $category_id = $this->category->id;
         return [
-            //
+            'name'  => 'required|unique:categories,name,'.$category_id,
+            'slug'  => 'required|unique:categories,slug,'.$category_id,
         ];
     }
 }

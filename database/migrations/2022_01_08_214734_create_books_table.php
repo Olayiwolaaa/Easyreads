@@ -21,7 +21,7 @@ class CreateBooksTable extends Migration
             $table->double('init_price');
             $table->double('discount_price');
             $table->foreignId('author_id')->constrained()->onDelete('cascade');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('rating_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('coupon_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();

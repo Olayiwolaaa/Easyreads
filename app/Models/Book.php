@@ -41,7 +41,9 @@ class Book extends Model implements HasMedia
 
     public function getDiscountRateAttribute()
     {
-        return round((($this->init_price - $this->discount_price)*100)/$this->init_price);
+        return $this->init_price == 0 ? 
+            '0' : 
+            round((($this->init_price - $this->discount_price)*100)/$this->init_price);
     }
 
     public function registerMediaConversions(Media $media = null): void

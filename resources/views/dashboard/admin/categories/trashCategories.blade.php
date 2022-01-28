@@ -6,24 +6,15 @@
         <h1 class="h3 mb-2 text-gray-800">Categories</h1>
         <div class="my-2 px-1">
             <div class="row">
-                <div class="col-6">
-                    <div>
-                        <a href="{{route('admin.categories.create')}}" class="btn-primary btn-sm">
-                            <i class="fas fa-plus-circle mr-1"></i>
-                            Add Category
-                        </a>
-                    </div>
-                </div>
-                <div class="col-6 text-right">
-                    <span class="mr-2"><a href="{{ route('admin.category.uncategorizedBooks') }}">View Uncategorized books</a></span>
-                    {{-- <span class="mr-2"><a href="{{ route('admin.categories.trashCategories') }}">Trash Categories</a></span> --}}
+                <div class="col-12 text-right">
+                    <span class="mr-2"><a href="{{ route('admin.categories.index') }}">All Categories</a></span>
                 </div>
             </div>
         </div>
         @include('partials.flash_messages')
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">All Categories</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Trashed Categories</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -56,18 +47,18 @@
                                     <td>{{$loop->iteration}}</td>
                                     <td>
                                         <div class="action d-flex flex-row">
-                                            <a href="{{ route('admin.categories.edit', $category) }}" class="btn-primary btn btn-sm mr-2"><i class="fas fa-edit"></i></a>
-                                            <form action="{{ route('admin.categories.destroy', $category) }}" method="post">
+                                            <a onclick="return confirm('Are you sure you want to restore this category?')" href="{{ route('admin.categories.restore', $category->id) }}" class="btn btn-sm btn-primary mr-2"><i class="fa fa-undo"></i></a>
+                                            <form action="{{ route('admin.categories.forceDelete', $category->id) }}" method="POST">
                                                 @csrf
-                                                @method("DELETE")
-                                                <button type="submit" onclick="return confirm('Are you sure to delete??')" class="btn btn-sm btn-danger">
-                                                    <i class="fas fa-trash"></i>
+                                                @method('DELETE')
+                                                <button type="submit" onclick="return confirm('Are you sure to delete? This category will be permanently deleted with the books associated with it!')" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-times"></i>
                                                 </button>
                                             </form>
                                         </div>
                                     </td>
                                     <td>{{ $category->name }}</td>
-                                    <td><a href="{{ route('admin.category.books', $category->id) }}">{{ $category->books_count }}</a></td>
+                                    <td>{{ $category->books_count }}</td>
                                     <td>{{ $category->created_at->diffForHumans() }}</td>
                                     <td>{{ $category->updated_at->diffForHumans() }}</td>
                                 </tr>

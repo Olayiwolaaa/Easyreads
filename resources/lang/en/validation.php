@@ -147,6 +147,9 @@ return [
         'cover_image' => [
             'max' => 'The cover image maximum size is 1MB'
         ],
+        'profile_image' => [
+            'max' => 'The cover image maximum size is 1MB'
+        ],
     ],
 
     /*
