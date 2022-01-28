@@ -7,7 +7,7 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Book create form</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Book update form</h6>
             </div>
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -25,19 +25,19 @@
                     @method("PUT")
                     <div class="form-group">
                         <label for="title">Title</label>
-                        <input type="text" name="title" id="title" class="form-control" value="{{ old('title') ? old('title') : $book->title }}" placeholder="Enter Book Title">
+                        <input type="text" name="title" id="title" class="form-control" value="{{ old('title') ?? $book->title }}" placeholder="Enter Book Title">
                     </div>
                     <div class="form-group">
                         <label for="slug">Slug</label>
-                        <input type="text" name="slug" id="slug" class="form-control" value="{{ old('title') ? old('slug') : $book->slug }}" placeholder="">
+                        <input type="text" name="slug" id="slug" class="form-control" value="{{ old('title') ?? $book->slug }}" placeholder="">
                     </div>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea name="description" class="form-control" cols="30" rows="10">{{ old('description') ? old('description') : $book->description }}</textarea>
+                        <textarea name="description" class="form-control" cols="30" rows="10">{{ old('description') ?? $book->description }}</textarea>
                     </div>
                     <div class="form-group">
                         <label for="category">Category</label>
-                            <select name="category_id" class="form-control" value="{{ old('categoy_id') ? old('categoy_id') : $book->category_id }}">
+                            <select name="category_id" class="form-control" value="{{ old('categoy_id') ?? $book->category_id }}">
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach

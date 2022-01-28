@@ -19,7 +19,7 @@ class AdminUserController extends Controller
      */
     public function index()
     {
-        $users = User::with('role')
+        $users = User::where('id', '!=', auth()->id())->with('role')
             ->get();
 
         return view('dashboard.admin.users.index', compact('users'));

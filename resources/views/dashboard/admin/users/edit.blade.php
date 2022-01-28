@@ -3,11 +3,11 @@
 @section('content')
     <div class="container-fluid">
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Add new user</h1>
+        <h1 class="h3 mb-2 text-gray-800">Edit user</h1>
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">user create form</h6>
+                <h6 class="m-0 font-weight-bold text-primary">user edit form</h6>
             </div>
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -37,14 +37,6 @@
                                 <option value="{{ $role->id }}">{{ $role->name }}</option>
                             @endforeach
                         </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" id="password" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="confirm password">Confirm Password</label>
-                        <input type="password" name="password_confirmation" id="confirm password" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="file upload">Upload Profile Image</label>
